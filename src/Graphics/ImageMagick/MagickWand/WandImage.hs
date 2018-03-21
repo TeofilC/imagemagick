@@ -878,7 +878,6 @@ setImageDelay w delay = withException_ w $ F.magickSetImageDelay w (fromIntegral
 -- is on haskell heap.
 getImageBlob :: (MonadResource m) => PMagickWand -> m ByteString
 getImageBlob w = liftIO $ do
-  F.magickResetIterator w
   cl <- alloca $ \x -> do
           c <- F.magickGetImageBlob w x
           x' <- fmap fromIntegral (peek x)
