@@ -97,6 +97,8 @@ module Graphics.ImageMagick.MagickWand.MagickWand
 --    , setSamplingFactors
 --    , setSizeOffset
 --    , setType
+      , getResolution
+      , setResolution
   ) where
 
 import           Control.Applicative                                ((<$>))
@@ -348,3 +350,17 @@ getImageArtifacts w pattern = liftIO $ alloca $ \pn -> do
     return artifact
   F.magickRelinquishMemory (castPtr partifactps)
   return artifacts
+
+getResolution :: (MonadResource m) => Ptr MagickWand -> m (Double, Double)
+getResolution w = liftIO $ alloca $ \py -> do
+  x <- alloca $ \px -> withExceptionIO w $ do
+    result <- F.magickGetResolution w px py
+    value <- peek px
+    return (result, value)
+  y <- peek py
+  return (realToFrac x, realToFrac y)
+
+setResolution :: (MonadResource m) => Ptr MagickWand -> Double -> Double -> m ()
+setResolution w x y = withException_ w $ F.magickSetResolution w (realToFrac x) (realToFrac y)
+
+

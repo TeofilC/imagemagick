@@ -134,3 +134,17 @@ foreign import ccall "MagickGetImageArtifacts" magickGetImageArtifacts
   -> CString        -- ^ the pattern
   -> Ptr CSize
   -> IO (Ptr CString)
+
+-- | MagickGetResolution() returns the image X and Y resolution.
+foreign import ccall "MagickGetResolution" magickGetResolution
+  :: Ptr MagickWand
+  -> Ptr CDouble -- ^ x resolution
+  -> Ptr CDouble -- ^ y resolution
+  -> IO MagickBooleanType
+
+-- | MagickSetResolution() sets the X and Y resolution.
+foreign import ccall "MagickSetResolution" magickSetResolution
+  :: Ptr MagickWand
+  -> CDouble -- ^ x resolution
+  -> CDouble -- ^ y resolution
+  -> IO MagickBooleanType
